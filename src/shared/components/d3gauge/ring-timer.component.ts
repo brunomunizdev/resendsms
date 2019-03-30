@@ -1,18 +1,18 @@
-import { Component, EventEmitter, OnChanges, SimpleChange, Input, Output} from '@angular/core';
+import { Component, EventEmitter, OnChanges, SimpleChange, Input, Output } from '@angular/core';
 
 import { RingTimerEngine } from './ring-timer-engine';
 import { RingTimerGraphics } from './ring-timer-graphics';
 
 @Component({
-    selector: 'ring-timer',
-    templateUrl: 'ring-timer.component.html'
+  selector: 'ring-timer',
+  templateUrl: 'ring-timer.component.html'
 })
 export class RingTimerComponent implements OnChanges {
   @Input() timerAction: any;
   @Input() warmUpFor: any;
   @Input() countdownFor: any;
   @Input() warningFor: any;
-  
+
   @Output() finished = new EventEmitter<boolean>();
 
   changeLog: string[] = [];
@@ -23,28 +23,28 @@ export class RingTimerComponent implements OnChanges {
   constructor() {
     this.ringTimerEngine = new RingTimerEngine();
     this.ringTimerGraphics = new RingTimerGraphics(this.ringTimerEngine);
-    this.ringTimerEngine.finishedSubject.subscribe( data => { this.onTimerFinished(); }); 
+    this.ringTimerEngine.finishedSubject.subscribe(data => { this.onTimerFinished(); });
     this.loadDefaultConfig();
   }
-  
+
   loadDefaultConfig() {
     let config = {
-      countdownFor: 15000,  // countdown time in ms
-      warmUpFor: 3000,  // countdown time in ms
-      warningFor: 1000,  // countdown time in ms
+      countdownFor: 15000,  // tempo de contagem regressiva em ms
+      warmUpFor: 3000,  // tempo de contagem regressiva em ms
+      warningFor: 1000,  // tempo de contagem regressiva em ms
     };
     this.config = config;
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.loadParentConfig();
     this.ringTimerEngine.initTimer();
   };
 
   // **
-  // ** Respond to messages from parent
+  // ** Responder a mensagens parent
   // **
-  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     let log: string[] = [];
     for (let propName in changes) {
       let changedProp = changes[propName];
@@ -62,7 +62,7 @@ export class RingTimerComponent implements OnChanges {
     // console.log(JSON.stringify(this.changeLog));
   }
 
-  handlePropName(propName, propValue, isFirstChange: boolean){
+  handlePropName(propName, propValue, isFirstChange: boolean) {
     switch (propName) {
       case 'timerAction':
         this.handleTimerAction();
@@ -71,7 +71,7 @@ export class RingTimerComponent implements OnChanges {
       case 'countdownFor':
       case 'warningFor':
         this.config[propName] = parseInt(propValue);
-        if (!isFirstChange){
+        if (!isFirstChange) {
           this.loadParentConfig();
           this.ringTimerEngine.initTimer();
         }
@@ -95,25 +95,25 @@ export class RingTimerComponent implements OnChanges {
         this.ringTimerEngine.stopTimer();
         break;
       case ("stopped"):
-        // do nothing - just a bounce back from notifying the parent that timer has finished.
+        // não faça nada - apenas um retorno de notificar o pai que o timer terminou.
         break;
       case ("init"):
-        // do nothing - just the TimerAction being set for the first time.
+        // não faça nada - apenas o TimerAction sendo definido pela primeira vez.
         console.log('in init case');
         break;
     }
   }
 
-  private onTimerFinished(){
-    // send a message back to the parent
+  private onTimerFinished() {
+    // enviar uma mensagem de volta para o pai
     console.log("about to emit 'finished' to parent");
     this.finished.emit();
   }
 
   // **
-  // ** Load Timer's Time Settings
+  // ** Carregar as configurações de tempo do timer
   // **
-  loadParentConfig(){
+  loadParentConfig() {
     console.log('in loadParentConfig');
     this.config.warmUpFor = parseInt(this.warmUpFor);
     this.config.countdownFor = parseInt(this.countdownFor);
