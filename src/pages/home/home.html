@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Teste reenvio sms</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <!--   <ion-col col-md-1>
+      </ion-col> -->
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+
+
+      <ion-footer no-border>
+        <ion-grid>
+          <ion-row>
+
+            <ion-col col-1>
+            </ion-col>
+
+            <ion-col col-10 >
+              <button color=primary [disabled]="startMicTimerBtnDisabled" (click)="onStartMicTimer()" style="font-size: 13px; margin-left: 57px; float: left;">
+                Solsicite um novo código sms </button>
+              <div style=" float: none; margin-left: 105px; margin-top: -23px;">
+                <ring-timer id="ring-timer-gauge1" timerAction={{ringTimerAction}} warmUpFor={{warmUpFor}} countdownFor={{countdownFor}}
+                  warningFor={{warningFor}} (finished)="onFinished($event)">
+                </ring-timer>
+              </div>
+            </ion-col>
+            <ion-col col-1>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-footer>
+
+
+      <!--  <ion-col col-md-1>
+      </ion-col> -->
+    </ion-row>
+  </ion-grid>
+</ion-content>
