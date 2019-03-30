@@ -16,36 +16,36 @@ export class RingTimerGraphics {
   gaugeCircleY: any;
   pulsingScale: any;
 
-  // reference to timeData object
+  // rreferência ao objeto timeData
   timeData: any;
   warmUpRemaining: number;
 
-  constructor(ringTimerEngine: RingTimerEngine){
+  constructor(ringTimerEngine: RingTimerEngine) {
     this.loadDefaultConfig();
     this.ringTimerEngine = ringTimerEngine;
-    this.ringTimerEngine.timeDataSubject.subscribe( timeData => { this.updateTimeData(); });     
-    this.ringTimerEngine.phaseSubject.subscribe( timeData => { this.updatePhase(); });
-    this.ringTimerEngine.initSubject.subscribe( timeData => { this.updateInit(); });
-    this.ringTimerEngine.pausePingSubject.subscribe( timeData => { this.updateTimeData(); });
+    this.ringTimerEngine.timeDataSubject.subscribe(timeData => { this.updateTimeData(); });
+    this.ringTimerEngine.phaseSubject.subscribe(timeData => { this.updatePhase(); });
+    this.ringTimerEngine.initSubject.subscribe(timeData => { this.updateInit(); });
+    this.ringTimerEngine.pausePingSubject.subscribe(timeData => { this.updateTimeData(); });
   }
 
   private loadDefaultConfig(): void {
 
     let config = {
-      // layout/colours configuration
-      ringSpacing: 1, // px spacing between the s and ms counter rings
-      rSize: 17, // px overall size of internal micTimer ex the arc thickness
-      rThickness: 10, // px thickness of micTimer
-      msShrinkFactor: 0.75, // millisecond circle thickness. 0 is full size, 1 is zero thickness
-      scaleFactor: 1.00,  // multiplier to scale the entire gauge.
-      counterTextSize: 1.5, // The relative height of the text to display in the circle. 1 = 50%
-      unitTextSize: 0.6, // The relative height of the text to display in the circle. 1 = 50%
+      // configuração de layout / cores
+      ringSpacing: 1, // px espaçamento entre os anéis do contador s e ms
+      rSize: 17, // px tamanho total do micTimer interno ex a espessura do arco
+      rThickness: 10, // px espessura de micTimer
+      msShrinkFactor: 0.75, // espessura do círculo milissegundo. 0 é tamanho completo, 1 é espessura zero
+      scaleFactor: 1.00,  // multiplicador para dimensionar todo o medidor.
+      counterTextSize: 1.5, // A altura relativa do texto a ser exibido no círculo. 1 = 50%
+      unitTextSize: 0.6, // A altura relativa do texto a ser exibido no círculo. 1 = 50%
 
       colors: {
-       // first: 'rgba' + d3.rgb("#dde0e4").toString().slice(3, - 1) +  ', 0.2)', // lightslategrey
+        // first: 'rgba' + d3.rgb("#dde0e4").toString().slice(3, - 1) +  ', 0.2)', // lightslategrey
         //ready: 'rgba' + d3.rgb("#dde0e4;").toString().slice(3, - 1) +  ', 0.7)', //gold
-        countdown: 'rgba' + d3.rgb("#9E1DA0").toString().slice(3, - 1) +  ', 0.7)', // seagreen
-       // warmup: "orange", // orange
+        countdown: 'rgba' + d3.rgb("#9E1DA0").toString().slice(3, - 1) + ', 0.7)', // seagreen
+        // warmup: "orange", // orange
         //warning: 'rgba' + d3.rgb("#dde0e4").toString().slice(3, - 1) +  ', 0.7)', // red
         //paused: 'rgba' + d3.rgb("#dde0e4;").toString().slice(3, - 1) +  ', 0.7)', //gold
         //finished: 'rgba' + d3.rgb("#dde0e4;").toString().slice(3, - 1) +  ', 0.8)', // gold
@@ -53,23 +53,23 @@ export class RingTimerGraphics {
         //text:  'rgba' + d3.rgb("#dde0e4;").toString().slice(3, - 1) +  ', 1.0)', // black
       },
 
-      warmUpFlashTime: 1000, // time to change alpha of warmup band.
+      warmUpFlashTime: 1000, // timer de mudar o alfa da banda de aquecimento.
       unitsToDisplay: 'SEGUNDOS',
-      ringCount: 5, // number of micTimers in the component
+      ringCount: 5, // número de micTimers no componente
       elementId: 'ring-timer-gauge',
 
-      calc: { // these variables are placed here as the config structure is a convenient place to store, pass them. But not actually configuration variables.
-          radius: 0,
-          counterTextPixels: 0,
-          unitTextPixels: 0,
-          // variable set via public setters
-          phase: 'codigo enviado', // 'warmup', 'countdown', 'warning', 'finished', 'paused', 'stopped'
-          warmUpMessage: 'codigo enviado...',
-          alphas: {
-            paused: 0.3, // variable to enable pulsing effect during a pause phase.
-            warmup: 0.3, // variable to enable pulsing effect during the warm up phase.
-          }          
-      } 
+      calc: { // essas variáveis ​​são colocadas aqui, pois a estrutura de configuração é um local conveniente para armazenar, passá-las. Mas não, na verdade, variáveis ​​de configuração.
+        radius: 0,
+        counterTextPixels: 0,
+        unitTextPixels: 0,
+        // conjunto de variáveis ​​via setters públicos
+        phase: 'codigo enviado', // 'warmup', 'countdown', 'warning', 'finished', 'paused', 'stopped'
+        warmUpMessage: 'codigo enviado...',
+        alphas: {
+          paused: 0.3, // variável para permitir o efeito pulsante durante uma fase de pausa.
+          warmup: 0.3, // variável para permitir o efeito pulsante durante a fase de aquecimento.
+        }
+      }
     };
     this.config = config;
   }
@@ -83,7 +83,7 @@ export class RingTimerGraphics {
       this.determineWarmUpMessage();
     }
     //if (this.isPausedPhase())
-      //this.determinePauseAlpha();
+    //this.determinePauseAlpha();
 
     this.drawD3Timer();
   }
@@ -93,13 +93,13 @@ export class RingTimerGraphics {
   }
 
   private updateInit(): void {
-    this.setRingCount(this.ringTimerEngine.getTimeUnitCount()+1);
-    this.initDimensions(); // extracted from end of readyTimer
+    this.setRingCount(this.ringTimerEngine.getTimeUnitCount() + 1);
+    this.initDimensions(); // extraído do final de readyTimer
     this.initD3Timer();
-    this.drawD3Timer();    
+    this.drawD3Timer();
   }
 
-  private setColorAlpha(colorKey: string, alpha: number){
+  private setColorAlpha(colorKey: string, alpha: number) {
     this.config.calc.alphas[colorKey] = alpha;
   }
 
@@ -119,36 +119,36 @@ export class RingTimerGraphics {
     return (this.config.calc.phase === "paused");
   }
 
-  private setRingCount(ringCount: number){
+  private setRingCount(ringCount: number) {
     this.config.ringCount = ringCount;
   }
 
   private determineWarmUpAlpha(): void {
     this.warmUpRemaining = this.ringTimerEngine.getWarmUpRemaining();
-    let alpha = ((this.warmUpRemaining)/this.config.warmUpFlashTime) % 1;
+    let alpha = ((this.warmUpRemaining) / this.config.warmUpFlashTime) % 1;
     this.setColorAlpha("warmup", alpha);
   }
 
-  // the warmUp text - gives user plenty of notice timer will start shortly.
+  // o texto warmUp - dá ao usuário uma abundância de temporizador de aviso começará em breve.
   private determineWarmUpMessage(): void {
     let warmUpMessage: string = '';
-    if (this.warmUpRemaining >= 2000) warmUpMessage = Math.ceil((this.warmUpRemaining/1000)) + '';
+    if (this.warmUpRemaining >= 2000) warmUpMessage = Math.ceil((this.warmUpRemaining / 1000)) + '';
     if (this.warmUpRemaining < 2000) warmUpMessage = "código enviado";
     this.setWarmupMessage(warmUpMessage);
   }
 
-  // determine overall dimensions of control and its major components
+  // determinar as dimensões gerais do controle e seus principais componentes
   public initDimensions(): void {
     this.applySizeScaleFactor();
     this.setMicTimerDimAttr();
-    // Outer Radius of Ringer Gauge
+    // Raio externo do calibre da campainha
     this.config.calc.radius = this.micTimerDimAttr.w / 2;
-    // Calculate the size of the font in pixels
+    // Calcular o tamanho da fonte em pixels
     this.config.calc.counterTextPixels = (this.config.counterTextSize * this.config.rSize / 2);
     this.config.calc.unitTextPixels = (this.config.unitTextSize * this.config.rSize / 2);
   }
 
-  private applySizeScaleFactor(): void{
+  private applySizeScaleFactor(): void {
     this.config.ringSpacing = this.config.ringSpacing * this.config.scaleFactor;
     this.config.rSize = this.config.rSize * this.config.scaleFactor;
     this.config.rThickness = this.config.rThickness * this.config.scaleFactor;
@@ -156,9 +156,9 @@ export class RingTimerGraphics {
 
   private setMicTimerDimAttr(): void {
     this.micTimerDimAttr = {
-      w: (this.config.rSize  + (this.config.rThickness * this.config.ringCount) + ((this.config.ringCount - 1) * this.config.ringSpacing)) * 2 + 6, // the +6 adds some margins.
+      w: (this.config.rSize + (this.config.rThickness * this.config.ringCount) + ((this.config.ringCount - 1) * this.config.ringSpacing)) * 2 + 6, // the +6 adds some margins.
       h: (this.config.rSize + (this.config.rThickness * this.config.ringCount) + ((this.config.ringCount - 1) * this.config.ringSpacing)) * 2 + 6,
-      margin: {top: 2, bottom: 2, right: 2, left: 2}
+      margin: { top: 2, bottom: 2, right: 2, left: 2 }
     };
   }
 
@@ -166,7 +166,7 @@ export class RingTimerGraphics {
   // ** D3 UI routines
   // **
 
-  // ** Initialise D3 objects
+  // **Inicializar objetos D3
   public initD3Timer(): void {
     console.log('in initD3Timer');
     this.getTimerSVG();
@@ -177,17 +177,17 @@ export class RingTimerGraphics {
     this.initD3Scales();
     this.isTimerInitialised = true;
   }
-  
+
   private getTimerSVG(): void {
     this.micTimer = d3.select("#" + this.config.elementId);
   }
-  
+
   private sizeTimerSVG(): void {
     this.micTimer
-      // adjust the svg size to fit all the individual counters
-      .style("width", this.micTimerDimAttr.w + this.micTimerDimAttr.margin.left + this.micTimerDimAttr.margin.right) 
-      // adjust the svg size to fit all the individual counters}
-      .style("height", this.micTimerDimAttr.h + this.micTimerDimAttr.margin.top + this.micTimerDimAttr.margin.bottom); 
+      // ajustar o tamanho do svg para caber todos os contadores individuais
+      .style("width", this.micTimerDimAttr.w + this.micTimerDimAttr.margin.left + this.micTimerDimAttr.margin.right)
+      // ajustar o tamanho do svg para caber todos os contadores individuais
+      .style("height", this.micTimerDimAttr.h + this.micTimerDimAttr.margin.top + this.micTimerDimAttr.margin.bottom);
   }
 
   private clearTimerSVG(): void {
@@ -196,107 +196,107 @@ export class RingTimerGraphics {
 
   private createTimerGroup(): void {
     this.micTimerGroup = this.micTimer.append("g")
-        .attr("transform", "translate(" + this.micTimerDimAttr.margin.left + "," + this.micTimerDimAttr.margin.top + ")");
+      .attr("transform", "translate(" + this.micTimerDimAttr.margin.left + "," + this.micTimerDimAttr.margin.top + ")");
   }
 
 
   private addDropShadow(): void {
-    // ** filter stuff
-    // ** For the drop shadow filter...
-    let defs = this.micTimerGroup.append( 'defs' );
+    // ** coisas de filtro
+    // ** Para o filtro de sombreamento ..
+    let defs = this.micTimerGroup.append('defs');
 
-    let filter = defs.append( 'filter' )
-                      .attr( 'id', 'dropshadow' )
+    let filter = defs.append('filter')
+      .attr('id', 'dropshadow')
 
-    filter.append( 'feGaussianBlur' )
-          .attr( 'in', 'SourceAlpha' )
-          .attr( 'stdDeviation', 2 ) // 2
-          .attr( 'result', 'blur' );
-    
-    filter.append( 'feOffset' )
-          .attr( 'in', 'blur' )
-          .attr( 'dx', 1 ) // 2
-          .attr( 'dy', 1 ) // 3
-          .attr( 'result', 'offsetBlur' );
+    filter.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 2) // 2
+      .attr('result', 'blur');
 
-    let feMerge = filter.append( 'feMerge' );
+    filter.append('feOffset')
+      .attr('in', 'blur')
+      .attr('dx', 1) // 2
+      .attr('dy', 1) // 3
+      .attr('result', 'offsetBlur');
 
-    feMerge.append( 'feMergeNode' )
-            .attr( 'in", "offsetBlur' )
-    feMerge.append( 'feMergeNode' )
-            .attr( 'in', 'SourceGraphic' );
+    let feMerge = filter.append('feMerge');
+
+    feMerge.append('feMergeNode')
+      .attr('in", "offsetBlur')
+    feMerge.append('feMergeNode')
+      .attr('in', 'SourceGraphic');
     // end filter stuff
   }
 
   private initD3Scales(): void {
-    // Scales for drawing the timer rings.
+    // Escalas para desenhar os anéis do temporizador.
     this.gaugeCircleX = d3.scaleLinear()
-                        //  .range([0, 2 * Math.PI]).domain([0, 1])
-                        
-    this.gaugeCircleY = d3.scaleLinear()
-                         // .range([0, this.config.calc.radius])
-                          .domain([0, this.config.calc.radius]);
-                        
+    //  .range([0, 2 * Math.PI]).domain([0, 1])
 
-    // set range min to 0.3 as don't want text, arc to be fully transparent.
-    // domain oscillates between 0 and 1.0
+    this.gaugeCircleY = d3.scaleLinear()
+      // .range([0, this.config.calc.radius])
+      .domain([0, this.config.calc.radius]);
+
+
+    // defina o intervalo min para 0,3, pois não deseja que o texto, arc seja totalmente transparente.
+    // domínio oscila entre 0 e 1,0
     this.pulsingScale = d3.scalePow().exponent(0.8)
-                          .range([0.3, 1])
-                          .domain([0, 1]);
+      .range([0.3, 1])
+      .domain([0, 1]);
   }
 
-  // ** Draw and redraw D3 objects
+  // ** Desenhar e redesenhar objetos D3
   public drawD3Timer(): void {
-    this.drawFirstCircle();  // the base layer
-    this.drawSecondCircle(); // the moving layer
-    this.drawCounterText(); 
+    this.drawFirstCircle();  // a camada de base
+    this.drawSecondCircle(); // a camada móvel
+    this.drawCounterText();
     this.drawTimeUnitsText();
   }
 
   // **
-  // ** Draw the base circles (first circles).
+  // ** Desenhe os círculos da base (primeiros círculos).
   // **
   private drawFirstCircle(): void {
 
     let firstCircle = this.micTimerGroup.selectAll(".firstCircle")
-        .data(this.timeData, < any > function(d, i) { return d.idx; });
+      .data(this.timeData, <any>function (d, i) { return d.idx; });
 
     firstCircle.enter()
       .append("path")
-        .attr("class", "firstCircle")
-        .attr("d", this.circleArcFunction("firstCircle"))
-        .attr("filter", "url(#dropshadow)")
-        .attr("transform", "translate(" + this.config.calc.radius + "," + this.config.calc.radius + ")" )
-        .style("fill", this.config.colors.first)
+      .attr("class", "firstCircle")
+      .attr("d", this.circleArcFunction("firstCircle"))
+      .attr("filter", "url(#dropshadow)")
+      .attr("transform", "translate(" + this.config.calc.radius + "," + this.config.calc.radius + ")")
+      .style("fill", this.config.colors.first)
       .merge(firstCircle);
 
     firstCircle.exit().remove();
   }
 
   // **
-  // ** Draw the timer circles (second circles).
+  // ** Desenhe os círculos do temporizador (segundos círculos).
   // **
   private drawSecondCircle(): void {
     let self = this;
 
     let secondCircle = this.micTimerGroup.selectAll(".secondCircle")
-      .data(this.timeData, < any > function(d, i) { return d.idx; });
+      .data(this.timeData, <any>function (d, i) { return d.idx; });
 
     secondCircle.enter()
       .append("path")
-        .attr("class", "secondCircle")
-        .attr("transform", "translate(" + this.config.calc.radius + "," + this.config.calc.radius + ")" )
+      .attr("class", "secondCircle")
+      .attr("transform", "translate(" + this.config.calc.radius + "," + this.config.calc.radius + ")")
       .merge(secondCircle)
-        .style("fill", < any > function(d, i) { 
-          return self.getCircleColor(self.config.calc.phase); 
-        })
-       .attr("d", this.circleArcFunction("secondCircle"));
+      .style("fill", <any>function (d, i) {
+        return self.getCircleColor(self.config.calc.phase);
+      })
+      .attr("d", this.circleArcFunction("secondCircle"));
 
     secondCircle.exit().remove();
   }
 
   // ** 
-  // ** Draw Counter Text
+  // ** Desenhar texto do contador
   // **
   private drawCounterText(): void {
     let self = this;
@@ -309,19 +309,19 @@ export class RingTimerGraphics {
 
     ct.enter()
       .append("text")
-        .attr("class", "counterText")
-        .attr("text-anchor", "middle")
-        .attr("font-size", this.config.calc.counterTextPixels + "px")
-        .attr("transform", "translate(" + this.config.calc.radius + "," + (this.config.calc.radius + textShift) + ")" )
+      .attr("class", "counterText")
+      .attr("text-anchor", "middle")
+      .attr("font-size", this.config.calc.counterTextPixels + "px")
+      .attr("transform", "translate(" + this.config.calc.radius + "," + (this.config.calc.radius + textShift) + ")")
       .merge(ct)
-        .style("fill", < any > function(d, i) { return self.getTextColor(self.config.calc.phase); })
-        .text(< any > function(d) { return self.getCounterText(d); });
+      .style("fill", <any>function (d, i) { return self.getTextColor(self.config.calc.phase); })
+      .text(<any>function (d) { return self.getCounterText(d); });
 
     ct.exit().remove();
-  } 
+  }
 
   // ** 
-  // ** Draw Time Units Text
+  // ** Desenhar o texto das unidades de tempo
   // **
   private drawTimeUnitsText(): void {
     let singleDecValueIdx: number = this.getCounterDecValueIdx();
@@ -332,47 +332,47 @@ export class RingTimerGraphics {
 
     timeUnitsText.enter()
       .append("text")
-        .text(< any > function(d) { return d.t; })
-        .attr("class", "timeUnitsText")
-        .attr("text-anchor", "middle")
-        .attr("font-size", this.config.calc.unitTextPixels + "px")
-        .style("fill", this.config.colors.text)
-        .attr("transform", "translate(" + this.config.calc.radius + "," + (this.config.calc.radius + this.config.calc.unitTextPixels + shiftTimeUnitsText) + ")" );
+      .text(<any>function (d) { return d.t; })
+      .attr("class", "timeUnitsText")
+      .attr("text-anchor", "middle")
+      .attr("font-size", this.config.calc.unitTextPixels + "px")
+      .style("fill", this.config.colors.text)
+      .attr("transform", "translate(" + this.config.calc.radius + "," + (this.config.calc.radius + this.config.calc.unitTextPixels + shiftTimeUnitsText) + ")");
 
     timeUnitsText.exit().remove();
   }
 
   // **
-  // ** Functions for drawing arcs
+  // **Funções para desenhar arcos
   // **
   private circleArcFunction(circleName: string): any {
     let self = this;
     let secondCircleArc = d3.arc()
       .startAngle(this.gaugeCircleX(0))
-      .endAngle(< any > function(d) { return self.getEndAngle(d, circleName); })
-      .innerRadius(< any > function(d) { return self.getInnerRadius(d); })
-      .outerRadius(< any > function(d) { return self.getOuterRadius(d); });
+      .endAngle(<any>function (d) { return self.getEndAngle(d, circleName); })
+      .innerRadius(<any>function (d) { return self.getInnerRadius(d); })
+      .outerRadius(<any>function (d) { return self.getOuterRadius(d); });
     return secondCircleArc;
   }
 
-  private getEndAngle(d: any, circleName: string){
-    if (circleName === "firstCircle") 
+  private getEndAngle(d: any, circleName: string) {
+    if (circleName === "firstCircle")
       return this.gaugeCircleX(1);
     return this.gaugeCircleX(d.baseZeroToOne);
   }
 
   private getInnerRadius(d): number {
-    if (d.idx === 0) // the milliseconds ring is thinner than the outer rings.
-      return this.gaugeCircleY((this.config.rSize + this.config.rThickness * this.config.msShrinkFactor),);
-    return this.gaugeCircleY((this.config.rSize + (this.config.rThickness * d.idx) + (d.idx * this.config.ringSpacing)),);
+    if (d.idx === 0) // o anel de milissegundos é mais fino que os anéis externos.
+      return this.gaugeCircleY((this.config.rSize + this.config.rThickness * this.config.msShrinkFactor));
+    return this.gaugeCircleY((this.config.rSize + (this.config.rThickness * d.idx) + (d.idx * this.config.ringSpacing)));
   }
 
   private getOuterRadius(d): number {
-    return this.gaugeCircleY((this.config.rSize + (this.config.rThickness * (d.idx + 1)) + (d.idx * this.config.ringSpacing)),);
+    return this.gaugeCircleY((this.config.rSize + (this.config.rThickness * (d.idx + 1)) + (d.idx * this.config.ringSpacing)));
   }
 
   // **
-  // ** Functions for getting arc and text colors
+  // ** Funções para obter cores de arco e texto
   // **
   private applyAlpha(key: string, itemColor: any): string {
     if (typeof this.config.calc.alphas[key] !== undefined) {
@@ -393,9 +393,9 @@ export class RingTimerGraphics {
   }
 
   // **
-  // ** Functions for displaying counter text
+  // ** Funções para exibir o texto do contador
   // **
-  private getCounterDecValueIdx() : number {
+  private getCounterDecValueIdx(): number {
     let singleDecValueIdx: number = 0;
     for (let td of this.timeData) {
       if (td.t === this.config.unitsToDisplay) {
@@ -405,9 +405,9 @@ export class RingTimerGraphics {
     };
     return singleDecValueIdx;
   }
-  
-  private getCounterText(d: any){
-    if (this.config.calc.phase === 'warmup') { 
+
+  private getCounterText(d: any) {
+    if (this.config.calc.phase === 'warmup') {
       return this.config.calc.warmUpMessage;
     } else {
       let retVal = (d.singleDecValue.toFixed(2) < 1.0) ? d.singleDecValue.toFixed(2) : d.singleDecValue.toFixed(1);
